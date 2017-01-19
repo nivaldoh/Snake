@@ -1,6 +1,7 @@
 ﻿  SnakeGame.cpp
-c:\users\user\desktop\projects\c++\snakegame\snakegame\snakegame.cpp(84): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\desktop\projects\c++\snakegame\snakegame\snakegame.cpp(95): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\desktop\projects\c++\snakegame\snakegame\snakegame.cpp(169): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\user\desktop\projects\c++\snakegame\snakegame\snakegame.cpp(90): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\desktop\projects\c++\snakegame\snakegame\snakegame.cpp(100): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\desktop\projects\c++\snakegame\snakegame\snakegame.cpp(180): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\user\desktop\projects\c++\snakegame\snakegame\snakegame.cpp(196): warning C4101: 'direction': unreferenced local variable
   SnakeGame.vcxproj -> C:\Users\User\Desktop\Projects\C++\SnakeGame\Debug\SnakeGame.exe
   SnakeGame.vcxproj -> C:\Users\User\Desktop\Projects\C++\SnakeGame\Debug\SnakeGame.pdb (Full PDB)

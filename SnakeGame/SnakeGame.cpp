@@ -78,15 +78,9 @@ public:
 		}
 		if (nextTile == EMPTY) { //move entire body
 			short x, y, previousx, previousy, tempx, tempy;
-			//change board tiles
+			//store previous snake tail position
 			tempx = posx.back();
 			tempy = posy.back();
-			for (int i = 0; i < posx.size(); i++) {
-				x = posx.at(i);
-				y = posy.at(i);
-				board.at(y).at(x) = SNAKE;
-			}
-			board.at(tempy).at(tempx) = EMPTY; 	//turn last snake tile into empty
 
 			//move snake
 			previousx = posx.at(0);
@@ -101,6 +95,15 @@ public:
 				posx.at(j) = next_posx;
 				posy.at(j) = next_posy;
 			}
+
+			//change board tiles
+			for (int i = 0; i < posx.size(); i++) {
+				x = posx.at(i);
+				y = posy.at(i);
+				board.at(y).at(x) = SNAKE;
+			}
+			board.at(tempy).at(tempx) = EMPTY; 	//turn last snake tile into empty
+
 			//append new head at next location, probably not efficient
 			//posx.insert(posx.begin(),next_posx,1);
 			//posy.insert(posy.begin(), next_posy, 1);
@@ -119,9 +122,16 @@ public:
 
 	void showBoard() {
 		system("cls");
+		short current_tile;
 		for (short i = 0; i < BOARD_HEIGHT; i++) {
 			for (short j = 0; j < BOARD_WIDTH; j++) {
-				std::cout << board.at(i).at(j);
+				current_tile = board.at(i).at(j);
+				if (current_tile == EMPTY) { 
+					std::cout << " ";
+				}
+				else {
+					std::cout << current_tile;
+				}
 			}
 			std::cout << std::endl;
 		}
@@ -135,10 +145,12 @@ class Snake {
 public:
 	std::vector<short> posx;
 	std::vector<short> posy; //the board class mutates these vectors
+	short current_dir;
 
 	Snake(const short board_width, const short board_height) {
 		BOARD_WIDTH = board_width;
 		BOARD_HEIGHT = board_height;
+		current_dir = RIGHT;
 		initializeSnake();
 	}
 
@@ -155,24 +167,18 @@ public:
 			posy.push_back(curry);
 		}
 	}
-
-	void changeDirection() {
-
-	}
 };
 
 void run(Board board, Snake snake);
 
 int main()
 {
-	short BOARD_WIDTH = 10;
+	short BOARD_WIDTH = 20;
 	short BOARD_HEIGHT = 10; //use width and height greater than ~ 4 to avoid issues for now
 	srand(time(NULL));
 
 	Board board = Board(BOARD_WIDTH, BOARD_HEIGHT);
 	Snake snake = Snake(BOARD_WIDTH, BOARD_HEIGHT);
-
-	//TODO: make movement impossible from left to right, up to down, etc to stop snake suicide
 
 	setup();
 	run(board, snake);
@@ -182,12 +188,37 @@ int main()
 	return 0;
 }
 
+//TODO: fix "screen tearing"
 void run(Board board, Snake snake) {
-
+	double startTime, endTime;
+	startTime = clock();
+	endTime = 0;
+	board.moveSnake(RIGHT, snake.posx, snake.posy);
 	while (board.alive) {
-		//getKeyPress()
-		board.moveSnake(RIGHT, snake.posx, snake.posy);
+		if ((endTime - startTime)/(double)CLOCKS_PER_SEC >= 0.5) {
+			startTime = clock();
+			endTime = 0;
+			if (GetAsyncKeyState(VK_RIGHT) == 1 && snake.current_dir != LEFT) {
+				board.moveSnake(RIGHT, snake.posx, snake.posy);
+				snake.current_dir = RIGHT;
+			}
+			else if (GetAsyncKeyState(VK_LEFT) == 1 && snake.current_dir != RIGHT) {
+				board.moveSnake(LEFT, snake.posx, snake.posy);
+				snake.current_dir = LEFT;
+			}
+			else if (GetAsyncKeyState(VK_DOWN) == 1 && snake.current_dir != UP) {
+				board.moveSnake(DOWN, snake.posx, snake.posy);
+				snake.current_dir = DOWN;
+			}
+			else if (GetAsyncKeyState(VK_UP) == 1 && snake.current_dir != DOWN) {
+				board.moveSnake(UP, snake.posx, snake.posy);
+				snake.current_dir = UP;
+			}
+			else { //no button pressed, continue in the same direction
+				board.moveSnake(snake.current_dir, snake.posx, snake.posy);
+			}
+		}
+		endTime = clock();
 		board.showBoard();
-		Sleep(2000);
 	}
 }
