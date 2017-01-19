@@ -188,12 +188,12 @@ int main()
 	return 0;
 }
 
-//TODO: fix "screen tearing"
 void run(Board board, Snake snake) {
 	double startTime, endTime;
 	startTime = clock();
 	endTime = 0;
 	board.moveSnake(RIGHT, snake.posx, snake.posy);
+	board.showBoard();
 	while (board.alive) {
 		if ((endTime - startTime)/(double)CLOCKS_PER_SEC >= 0.5) {
 			startTime = clock();
@@ -217,8 +217,8 @@ void run(Board board, Snake snake) {
 			else { //no button pressed, continue in the same direction
 				board.moveSnake(snake.current_dir, snake.posx, snake.posy);
 			}
+			board.showBoard();
 		}
 		endTime = clock();
-		board.showBoard();
 	}
 }

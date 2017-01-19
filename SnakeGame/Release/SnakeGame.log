@@ -1,11 +1,11 @@
 ﻿  SnakeGame.cpp
 SnakeGame.cpp(90): warning C4018: '<': signed/unsigned mismatch
 SnakeGame.cpp(100): warning C4018: '<': signed/unsigned mismatch
-SnakeGame.cpp(182): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+SnakeGame.cpp(178): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Generating code
-  1 of 233 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+  2 of 233 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SnakeGame.vcxproj -> C:\Users\User\Desktop\Projects\C++\SnakeGame\Release\SnakeGame.exe
   SnakeGame.vcxproj -> C:\Users\User\Desktop\Projects\C++\SnakeGame\Release\SnakeGame.pdb (Full PDB)
