@@ -15,8 +15,9 @@ const enum DIRECTION {UP, DOWN, LEFT, RIGHT};
 class Board;
 class Snake;
 
-void run(Board board, Snake snake);
+void run(Board board, Snake snake, float difficulty);
 void updateSnake(std::vector<short>& posx, std::vector<short>& posy, const short nextX, const short nextY, bool ateFood);
+void validateOption(char& input);
 
 class Board {
 	short BOARD_WIDTH;
@@ -180,31 +181,44 @@ int main()
 	std::cin >> size;
 	short BOARD_WIDTH;
 	short BOARD_HEIGHT;
-	while (size != '1' && size != '2' && size != '3') {
-		std::cout << "Invalid option. Press 1, 2 or 3 to choose" << std::endl;
-		std::cin >> size;
-		std::cout << size << std::endl;
-	}
+	validateOption(size);
 	switch (size) {
 		case 49: //'1'
+			BOARD_WIDTH = 14;
+			BOARD_HEIGHT = 7;
+			break;
+		case 50: //'2'
 			BOARD_WIDTH = 20;
 			BOARD_HEIGHT = 10;
 			break;
-		case 50: //'2'
-			BOARD_WIDTH = 30;
-			BOARD_HEIGHT = 15;
-			break;
 		case 51: //'3'
-			BOARD_WIDTH = 40;
-			BOARD_HEIGHT = 20;
+			BOARD_WIDTH = 26;
+			BOARD_HEIGHT = 13;
 			break;
+	}
+
+	std::cout << "Select game difficulty. Enter 1 for easy, 2 for medium or 3 for hard" << std::endl;
+	char diff_char;
+	std::cin >> diff_char;
+	validateOption(diff_char);
+	float difficulty;
+	switch (diff_char) {
+	case 49: //'1'
+		difficulty = 0.3;
+		break;
+	case 50: //'2'
+		difficulty = 0.2;
+		break;
+	case 51: //'3'
+		difficulty = 0.1;
+		break;
 	}
 
 	Board board = Board(BOARD_WIDTH, BOARD_HEIGHT);
 	Snake snake = Snake(BOARD_WIDTH, BOARD_HEIGHT);
 
 	setup();
-	run(board, snake);
+	run(board, snake, difficulty);
 
 	//std::cout << "END" << std::endl;
 	//std::cin >> size;
@@ -212,14 +226,21 @@ int main()
 	return 0;
 }
 
-void run(Board board, Snake snake) {
+void validateOption(char& input) {
+	while (input != '1' && input != '2' && input != '3') {
+		std::cout << "Invalid option. Press 1, 2 or 3 to choose" << std::endl;
+		std::cin >> input;
+	}
+}
+
+void run(Board board, Snake snake, float difficulty) {
 	double startTime, endTime;
 	startTime = clock();
 	endTime = 0;
 	board.moveSnake(RIGHT, snake.posx, snake.posy);
 	board.showBoard();
 	while (board.alive) {
-		if ((endTime - startTime)/(double)CLOCKS_PER_SEC >= 0.3) {
+		if ((endTime - startTime)/(double)CLOCKS_PER_SEC >= difficulty) {
 			startTime = clock();
 			endTime = 0;
 			if (GetAsyncKeyState(VK_RIGHT) != 0 && snake.current_dir != LEFT) {
