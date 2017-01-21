@@ -5,12 +5,9 @@
 #include <time.h>
 #include <Windows.h>
 
-void setup() {
-
-}
-
 const enum BOARD_ELEMENTS { OBSTACLE, FOOD, EMPTY, SNAKE };
 const enum DIRECTION {UP, DOWN, LEFT, RIGHT};
+const enum GAME_OVER_MENU {RETRY_SAME, RETRY_DIFFERENT, QUIT};
 
 class Board;
 class Snake;
@@ -174,55 +171,70 @@ public:
 
 int main()
 {
-	//srand(time(NULL));
+	short retry = RETRY_DIFFERENT, BOARD_WIDTH, BOARD_HEIGHT;;
+	float difficulty;
 	std::cout << "Welcome to the Snake game" << std::endl;
-	std::cout << "Select board size. Enter 1 for small, 2 for medium or 3 for large" << std::endl;
-	char size;
-	std::cin >> size;
-	short BOARD_WIDTH;
-	short BOARD_HEIGHT;
-	validateOption(size);
-	switch (size) {
+	while(retry != QUIT){
+		if (retry == RETRY_DIFFERENT) {
+			std::cout << "Select board size. Enter 1 for small, 2 for medium or 3 for large" << std::endl;
+			char size;
+			std::cin >> size;
+			validateOption(size);
+			switch (size) {
+			case 49: //'1'
+				BOARD_WIDTH = 14;
+				BOARD_HEIGHT = 7;
+				break;
+			case 50: //'2'
+				BOARD_WIDTH = 20;
+				BOARD_HEIGHT = 10;
+				break;
+			case 51: //'3'
+				BOARD_WIDTH = 26;
+				BOARD_HEIGHT = 13;
+				break;
+			}
+
+			std::cout << "Select game difficulty. Enter 1 for easy, 2 for medium or 3 for hard" << std::endl;
+			char diff_char;
+			std::cin >> diff_char;
+			validateOption(diff_char);
+			switch (diff_char) {
+			case 49: //'1'
+				difficulty = 0.3;
+				break;
+			case 50: //'2'
+				difficulty = 0.2;
+				break;
+			case 51: //'3'
+				difficulty = 0.1;
+				break;
+			}
+		}
+
+		Board board = Board(BOARD_WIDTH, BOARD_HEIGHT);
+		Snake snake = Snake(BOARD_WIDTH, BOARD_HEIGHT);
+
+		run(board, snake, difficulty);
+
+		std::cout << "Game over. Try again? Enter 1 to keep your settings, 2 to change board size/difficulty, or 3 to quit" << std::endl;
+		char end_char = NULL;
+		std::cin >> end_char;
+		validateOption(end_char);
+		switch (end_char) {
 		case 49: //'1'
-			BOARD_WIDTH = 14;
-			BOARD_HEIGHT = 7;
+			retry = RETRY_SAME;
 			break;
 		case 50: //'2'
-			BOARD_WIDTH = 20;
-			BOARD_HEIGHT = 10;
+			retry = RETRY_DIFFERENT;
 			break;
 		case 51: //'3'
-			BOARD_WIDTH = 26;
-			BOARD_HEIGHT = 13;
+			retry = QUIT;
 			break;
+		}
 	}
-
-	std::cout << "Select game difficulty. Enter 1 for easy, 2 for medium or 3 for hard" << std::endl;
-	char diff_char;
-	std::cin >> diff_char;
-	validateOption(diff_char);
-	float difficulty;
-	switch (diff_char) {
-	case 49: //'1'
-		difficulty = 0.3;
-		break;
-	case 50: //'2'
-		difficulty = 0.2;
-		break;
-	case 51: //'3'
-		difficulty = 0.1;
-		break;
-	}
-
-	Board board = Board(BOARD_WIDTH, BOARD_HEIGHT);
-	Snake snake = Snake(BOARD_WIDTH, BOARD_HEIGHT);
-
-	setup();
-	run(board, snake, difficulty);
-
-	//std::cout << "END" << std::endl;
-	//std::cin >> size;
-	//while (!getchar()) {}
+	//srand(time(NULL));
+	
 	return 0;
 }
 
