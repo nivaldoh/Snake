@@ -33,6 +33,17 @@ private:
 		board.at(ypos).at(xpos) = FOOD;
 	}
 
+	bool hasFoodTile() {
+		for (short i = 1; i < BOARD_HEIGHT-1; i++) {
+			for (short j = 1; j < BOARD_WIDTH-1; j++) {
+				if (board.at(i).at(j) == FOOD) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 public:
 	bool alive;
 
@@ -58,12 +69,12 @@ public:
 		createFood();
 	}
 
-	void createFood() { //TODO: handle error if width or height are <= 1; fix bug where food sometimes does not spawn
+	void createFood() { //TODO: handle error if board width or height are <= 1; fix bug where food sometimes does not spawn
 		srand(time(NULL));
 		createFoodOnce();
-		if( rand() % 10 + 1 > 8 ){ //20% chance to create food twice
-			createFoodOnce();
-		}
+		//if( rand() % 10 + 1 > 8 ){ //20% chance to create food twice
+			//createFoodOnce();
+		//}
 	}
 
 	void updateBoard(std::vector<short>& posx, std::vector<short>& posy) {
@@ -79,7 +90,7 @@ public:
 			y = posy.at(i);
 			board.at(y).at(x) = SNAKE;
 		}
-		board.at(tempy).at(tempx) = EMPTY; 	//turn last snake tile into empty
+		board.at(tempy).at(tempx) = EMPTY; 	//turn previous tail tile into empty
 	}
 
 	//TODO: fix seemingly harmless bug where snake is 1 tile smaller than what it should be.
@@ -118,6 +129,9 @@ public:
 				updateSnake(posx, posy, next_posx, next_posy, ateFood);
 				createFood();
 				updateBoard(posx, posy);
+				while (!hasFoodTile()) { 
+					createFood(); 
+				}
 			}
 	}
 
@@ -173,7 +187,7 @@ int main()
 {
 	short retry = RETRY_DIFFERENT, BOARD_WIDTH, BOARD_HEIGHT;;
 	float difficulty;
-	std::cout << "Welcome to the Snake game" << std::endl;
+	std::cout << "Welcome to the Snake game. Use the arrow keys to play." << std::endl;
 	while(retry != QUIT){
 		if (retry == RETRY_DIFFERENT) {
 			std::cout << "Select board size. Enter 1 for small, 2 for medium or 3 for large" << std::endl;
